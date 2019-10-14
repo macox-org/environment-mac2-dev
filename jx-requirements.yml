@@ -1,20 +1,59 @@
 autoUpdate:
   enabled: true
-  schedule: '0 0 * * *'
+  schedule: 0 0 * * *
+bootConfigURL: https://github.com/cloudbees/arcalos-boot-config.git
 cluster:
-  clusterName: ""
-  environmentGitOwner: ""
-  project: ""
+  azure: {}
+  clusterName: mac2
+  environmentGitOwner: macox-org
+  environmentGitPublic: true
+  externalDNSSAName: mac2-dn
+  gitKind: github
+  gitName: github
+  gitServer: https://github.com
+  kanikoSAName: mac2-ko
+  namespace: jx
+  project: aps-mac2
   provider: gke
-  zone: ""
-gitops: true
+  registry: gcr.io
+  vaultName: mac2
+  vaultSAName: mac2-vt
+  zone: us-east1-c
 environments:
-- key: dev
-- key: staging
-- key: production
+- ingress:
+    domain: ""
+    externalDNS: false
+    namespaceSubDomain: ""
+    tls:
+      email: ""
+      enabled: false
+      production: false
+  key: dev
+- ingress:
+    domain: ""
+    externalDNS: false
+    namespaceSubDomain: ""
+    tls:
+      email: ""
+      enabled: false
+      production: false
+  key: staging
+- ingress:
+    domain: ""
+    externalDNS: false
+    namespaceSubDomain: ""
+    tls:
+      email: ""
+      enabled: false
+      production: false
+  key: production
+gitops: true
 ingress:
-  domain: ""
-  externalDNS: false
+  cloud_dns_secret_name: external-dns-gcp-sa
+  domain: aps-mac2.jxaas.io
+  domainIssuerURL: https://jx-tenant-service-jx-staging.jenkins-x.live
+  externalDNS: true
+  namespaceSubDomain: -jx.
   tls:
     email: jenkins-x@cloudbees.com
     enabled: true
@@ -22,13 +61,26 @@ ingress:
 kaniko: true
 secretStorage: vault
 storage:
+  backup:
+    enabled: true
+    url: gs://aps-mac2-backup
   logs:
-    enabled: false
-    url: ""
+    enabled: true
+    url: gs://aps-mac2-lts
   reports:
     enabled: false
     url: ""
   repository:
     enabled: false
     url: ""
+vault:
+  bucket: aps-mac2-vault
+  key: mac2-crypto-key
+  keyring: mac2-keyring
+  name: mac2
+  serviceAccount: mac2-vt
+velero: {}
+versionStream:
+  ref: v0.0.24
+  url: https://github.com/cloudbees/arcalos-jenkins-x-versions.git
 webhook: prow
